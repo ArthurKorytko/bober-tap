@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bober-Tap</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1b1b1b;
+            color: white;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: black;
+            color: white;
+            border-bottom: 1px solid #333;
+        }
+
+        .top-bar .title {
+            font-size: 16px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+
+        .top-bar .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: grey;
+            margin-right: 10px;
+        }
+
+        .top-bar .right-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .right-icons img {
+            width: 24px;
+            margin-left: 10px;
+        }
+
+        .content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .diamond {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .circle-character {
+            width: 225px;
+            /* Увеличена ширина на 50% */
+            height: 225px;
+            /* Увеличена высота на 50% */
+            background-color: #292929;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .circle-character img {
+            width: 120px;
+            /* Увеличен размер изображения бобра */
+        }
+
+        .circle-character:hover {
+            background-color: #007BFF;
+            transition: background-color 0.3s;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #292929;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .bottom-nav img {
+            width: 24px;
+            cursor: pointer;
+            /* Добавлено для указания на возможность клика */
+        }
+
+        /* Стили для окна с рейтингом */
+        .leaderboard {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            display: none;
+            /* Скрываем по умолчанию */
+            z-index: 10;
+            width: 300px;
+            text-align: center;
+        }
+
+        .leaderboard h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .leaderboard ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .leaderboard li {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        .close-btn {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .top-bar .title {
+                font-size: 14px;
+            }
+
+            .diamond {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-bar">
+        <div class="title">
+            <div class="avatar">
+                <img src="https://i.imgur.com/TGOk99x.png" alt="Beaver Avatar"
+                    style="width:100%; height:100%; border-radius:50%;"> <!-- Вставлен аватар бобра -->
+            </div>
+            Bober-Tap
+        </div>
+        <div class="right-icons">
+            <img src="https://i.imgur.com/SgGzlO1.png" alt="Diamond"> <!-- Изображение бриллианта -->
+            <img src="https://i.imgur.com/1HFxppQ.png" alt="Heart"> <!-- Изображение сердца -->
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="diamond" id="diamondCount">0</div>
+        <!-- Здесь отображается количество бриллиантов (можно обновить значение через JS) -->
+
+        <div class="circle-character" id="boberCircle">
+            <img src="https://i.imgur.com/vfMylNQ.png" alt="Bober"> <!-- Изображение бобра -->
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <img src="https://img.icons8.com/fluency/48/000000/bitcoin.png" alt="Биржа">
+        <!-- Вставь изображение для раздела "Биржа" -->
+        <img src="https://img.icons8.com/fluency/48/000000/gold-bars.png" alt="AirDrop" id="airDropButton">
+        <!-- Изображение для AirDrop с рейтингом -->
+        <img src="https://img.icons8.com/fluency/48/000000/user-male.png" alt="Друзья">
+        <!-- Вставь изображение для раздела "Друзья" -->
+        <img src="https://img.icons8.com/fluency/48/000000/task.png" alt="Задания">
+        <!-- Вставь изображение для раздела "Задания" -->
+        <img src="https://img.icons8.com/fluency/48/000000/star.png" alt="Рейтинг" id="showLeaderboard">
+        <!-- Значок для рейтинга -->
+    </div>
+
+    <!-- Окно с рейтингом -->
+    <div class="leaderboard" id="leaderboard">
+        <h3>Рейтинг</h3>
+        <ul id="leaderboardList">
+            <li>Игрок 1: 0</li>
+            <li>Игрок 2: 0</li>
+            <li>Игрок 3: 0</li>
+        </ul>
+        <button class="close-btn" id="closeLeaderboard">Закрыть</button>
+    </div>
+
+    <script>
+        // Получаем элементы
+        const diamondCountElement = document.getElementById('diamondCount');
+        const boberCircle = document.getElementById('boberCircle');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const leaderboard = document.getElementById('leaderboard');
+        const showLeaderboardButton = document.getElementById('showLeaderboard');
+        const closeLeaderboardButton = document.getElementById('closeLeaderboard');
+        const airDropButton = document.getElementById('airDropButton');
+
+        // Получаем значение счетчика из localStorage или устанавливаем 0
+        let diamondCount = localStorage.getItem('diamondCount') ? parseInt(localStorage.getItem('diamondCount')) : 0;
+
+        // Список игроков (можно изменить на своих)
+        let players = [
+            { name: 'Игрок 1', taps: localStorage.getItem('tapsPlayer1') ? parseInt(localStorage.getItem('tapsPlayer1')) : 0 },
+            { name: 'Игрок 2', taps: localStorage.getItem('tapsPlayer2') ? parseInt(localStorage.getItem('tapsPlayer2')) : 0 },
+            { name: 'Игрок 3', taps: localStorage.getItem('tapsPlayer3') ? parseInt(localStorage.getItem('tapsPlayer3')) : 0 },
+        ];
+
+        // Функция для обновления отображаемого счетчика
+        function updateCounter() {
+            diamondCountElement.textContent = diamondCount;
+            localStorage.setItem('diamondCount', diamondCount); // Сохраняем в localStorage
+            updateLeaderboard(); // Обновляем рейтинг
+        }
+
+        // Функция для обновления рейтинга
+        function updateLeaderboard() {
+            // Сортируем игроков по количеству нажатий
+            players.sort((a, b) => b.taps - a.taps);
+
+            // Обновляем список в интерфейсе
+            leaderboardList.innerHTML = '';
+            players.forEach(player => {
+                const li = document.createElement('li');
+                li.textContent = `${player.name}: ${player.taps}`;
+                leaderboardList.appendChild(li);
+            });
+
+            // Сохраняем taps в localStorage
+            players.forEach((player, index) => {
+                localStorage.setItem(`tapsPlayer${index + 1}`, player.taps);
+            });
+        }
+
+        // Обновляем счетчик при загрузке
+        updateCounter();
+
+        // Обработчик клика по кругу
+        boberCircle.addEventListener('click', () => {
+            diamondCount++; // Увеличиваем счетчик
+            players[0].taps++; // Увеличиваем нажатия для первого игрока
+            updateCounter(); // Обновляем отображаемый счетчик
+        });
+
+        // Показать окно с рейтингом
+        airDropButton.addEventListener('click', () => {
+            leaderboard.style.display = 'block';
+        });
+
+        // Закрыть окно с рейтингом
+        closeLeaderboardButton.addEventListener('click', () => {
+            leaderboard.style.display = 'none';
+        });
+    </script>
+
+</body>
+
+</html>
