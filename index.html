@@ -19,6 +19,7 @@
             user-select: none;
             overflow: hidden;
             font-size: 1.2em;
+            text-align: center;
         }
 
         .top-bar, .bottom-nav {
@@ -53,7 +54,6 @@
             display: none;
             padding: 10px;
             flex: 1;
-            text-align: center;
         }
 
         .active {
@@ -61,8 +61,8 @@
         }
 
         .circle-character {
-            width: 300px; /* Увеличено в два раза */
-            height: 300px; /* Увеличено в два раза */
+            width: 375px; /* Увеличено на 1.5 раза */
+            height: 375px; /* Увеличено на 1.5 раза */
             background-color: #444;
             border-radius: 50%;
             margin: 0 auto;
@@ -78,8 +78,8 @@
         }
 
         .circle-character img {
-            width: 140px; /* Увеличено в два раза */
-            height: 140px; /* Увеличено в два раза */
+            width: 180px; /* Увеличено на 1.5 раза */
+            height: 180px; /* Увеличено на 1.5 раза */
         }
 
         .bottom-nav {
@@ -116,30 +116,69 @@
             100% { transform: scale(1) translate(0, -50px); opacity: 0; }
         }
 
-        .upgrade-button, .friends-list {
+        .upgrade-button {
             background-color: #444;
-            padding: 10px;
-            margin: 8px auto;
+            padding: 15px;
+            margin: 10px auto;
             border-radius: 10px;
             max-width: 300px;
             color: #ccc;
             font-size: 1em;
+            text-align: center;
+        }
+
+        .upgrade-button p {
+            margin: 0 0 10px;
+            font-size: 1.1em;
+            font-weight: bold;
         }
 
         .upgrade-button button {
             background-color: #007BFF;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 12px 20px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            width: 120px;
+            font-size: 1.2em;
+            width: 100%;
+            transition: background-color 0.3s;
         }
 
-        .upgrade-button p {
-            margin: 0;
+        .upgrade-button button:hover {
+            background-color: #0056b3;
         }
+
+        /* Стиль для мобильных устройств */
+        @media (max-width: 600px) {
+            body, html {
+                font-size: 1em;
+            }
+
+            .circle-character {
+                width: 200px;
+                height: 200px;
+            }
+
+            .circle-character img {
+                width: 100px;
+                height: 100px;
+            }
+
+            .upgrade-button button {
+                font-size: 1.1em;
+                padding: 10px;
+            }
+
+            .upgrade-button p {
+                font-size: 1em;
+            }
+
+            .diamond-balance {
+                font-size: 1em;
+            }
+        }
+
     </style>
 </head>
 
@@ -162,29 +201,33 @@
     <div id="upgrade" class="content">
         <h2>Прокачка</h2>
         <div class="upgrade-button">
-            <p>Сила нажатия +50% (5 кристаллов)</p>
-            <button onclick="upgradeFeature(5, 'Сила нажатия увеличена на 50%!')">5 Кристаллов</button>
+            <p>Сила нажатия</p>
+            <button onclick="upgradeFeature(5, 'Сила нажатия увеличена на 50%!')">Улучшить за 5 кристаллов</button>
         </div>
         <div class="upgrade-button">
-            <p>Авто-кликер (10 кристаллов)</p>
-            <button onclick="upgradeFeature(10, 'Авто-кликер активирован!')">10 Кристаллов</button>
+            <p>Авто-кликер</p>
+            <button onclick="upgradeFeature(10, 'Авто-кликер активирован!')">Улучшить за 10 кристаллов</button>
         </div>
         <div class="upgrade-button">
-            <p>Увеличение жизней +20% (8 кристаллов)</p>
-            <button onclick="upgradeFeature(8, 'Максимальные жизни увеличены на 20%!')">8 Кристаллов</button>
+            <p>Увеличение жизней</p>
+            <button onclick="upgradeFeature(8, 'Максимальные жизни увеличены на 20%!')">Улучшить за 8 кристаллов</button>
         </div>
         <div class="upgrade-button">
-            <p>Увеличение атаки +30% (12 кристаллов)</p>
-            <button onclick="upgradeFeature(12, 'Атака увеличена на 30%!')">12 Кристаллов</button>
+            <p>Увеличение атаки</p>
+            <button onclick="upgradeFeature(12, 'Атака увеличена на 30%!')">Улучшить за 12 кристаллов</button>
         </div>
     </div>
 
     <div id="friends" class="content">
         <h2>Пригласите друзей!</h2>
-        <button class="upgrade-button">Пригласить друга (+0.1 кристалла)</button>
-        <button class="upgrade-button">Пригласить друга с Telegram Premium (+0.3 кристалла)</button>
+        <div class="upgrade-button">
+            <button>Пригласить друга</button>
+        </div>
+        <div class="upgrade-button">
+            <button>Пригласить друга с Telegram Premium</button>
+        </div>
         <div class="friends-list">
-            <h3>Список ваших друзей</h3>
+            <h3>Ваши друзья</h3>
             <div>Друг 1</div>
             <div>Друг 2</div>
             <div>Друг 3</div>
@@ -193,14 +236,14 @@
 
     <div id="tasks" class="content">
         <h2>Задания</h2>
-        <div class="upgrade-button">Задание: Возвращение Bober Tap
-            <button onclick="window.open('https://example.com/return')">Перейти</button>
+        <div class="upgrade-button">
+            <button onclick="window.open('https://example.com/return')">Перейти к заданию: Возвращение Bober Tap</button>
         </div>
-        <div class="upgrade-button">Задание: Легендарные крипто-твиты
-            <button onclick="window.open('https://example.com/crypto-tweets')">Перейти</button>
+        <div class="upgrade-button">
+            <button onclick="window.open('https://example.com/crypto-tweets')">Перейти к заданию: Легендарные крипто-твиты</button>
         </div>
-        <div class="upgrade-button">Задание: Подписка на Instagram
-            <button onclick="window.open('https://instagram.com')">Перейти</button>
+        <div class="upgrade-button">
+            <button onclick="window.open('https://instagram.com')">Перейти к заданию: Подписка на Instagram</button>
         </div>
     </div>
 
@@ -229,7 +272,7 @@
 
         function updateDiamondDisplay() {
             document.getElementById('diamondBalance').textContent = diamondCount;
-            localStorage.setItem('diamondCount', diamondCount);
+            localStorage.setItem('diamondCount', diamondCount); // Сохранение в localStorage
         }
 
         document.getElementById('boberCircle').addEventListener('click', () => {
@@ -261,8 +304,7 @@
             }
         }
 
-        // При загрузке страницы обновляем дисплей
-        updateDiamondDisplay();
+        updateDiamondDisplay(); // Обновление баланса при загрузке страницы
     </script>
 
 </body>
