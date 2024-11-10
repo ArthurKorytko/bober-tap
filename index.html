@@ -3,312 +3,233 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Bober-Tap</title>
     <style>
-        body,
-        html {
+        /* Основные стили для мобильного интерфейса */
+        body, html {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
             background-color: #1b1b1b;
             color: white;
-            height: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            -webkit-user-select: none; /* Запрет выделения текста */
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            overflow: hidden;
         }
 
-        .top-bar {
+        img {
+            -webkit-user-drag: none; /* Запрет на перетаскивание изображений */
+        }
+
+        .top-bar, .bottom-nav {
+            background-color: #292929;
+            padding: 10px;
+            color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
-            background-color: black;
-            color: white;
-            border-bottom: 1px solid #333;
+            font-size: 14px;
         }
 
         .top-bar .title {
             font-size: 16px;
             font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .top-bar .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: grey;
-            margin-right: 10px;
-        }
-
-        .top-bar .right-icons {
-            display: flex;
-            align-items: center;
-        }
-
-        .right-icons img {
-            width: 24px;
-            margin-left: 10px;
         }
 
         .content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            flex-direction: column;
-            padding: 20px;
-            position: relative;
-        }
-
-        .diamond {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .circle-character {
-            width: 225px;
-            height: 225px;
-            background-color: #292929;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-        }
-
-        .circle-character img {
-            width: 120px;
-        }
-
-        .circle-character:hover {
-            background-color: #007BFF;
-            transition: background-color 0.3s;
-        }
-
-        .coin {
-            width: 40px;
-            /* Изменено на нормальный размер монеты */
-            height: 40px;
-            position: absolute;
-            animation: appear 0.3s ease-out forwards;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        @keyframes appear {
-            from {
-                transform: scale(0);
-                opacity: 0;
-            }
-
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #292929;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-        }
-
-        .bottom-nav img {
-            width: 24px;
-            cursor: pointer;
-        }
-
-        .leaderboard {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #333;
-            padding: 20px;
-            border-radius: 10px;
             display: none;
-            z-index: 10;
-            width: 300px;
+            padding: 10px;
+            flex: 1;
             text-align: center;
         }
 
-        .leaderboard h3 {
-            margin: 0;
-            font-size: 18px;
+        .active {
+            display: block;
         }
 
-        .leaderboard ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .leaderboard li {
+        /* Стили кристалла */
+        .diamond-counter {
             font-size: 16px;
-            margin: 5px 0;
+            color: #FFD700;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .close-btn {
+        .diamond-counter img {
+            width: 20px;
+            height: 20px;
+            margin-left: 5px;
+        }
+
+        /* Круглый элемент с бобром */
+        .circle-character {
+            width: 100px;
+            height: 100px;
+            background-color: #333;
+            border-radius: 50%;
+            margin: 15px auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .circle-character img {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* Стили кнопок */
+        .button {
             background-color: #007BFF;
             color: white;
             border: none;
+            padding: 8px 12px;
             border-radius: 5px;
-            padding: 10px 15px;
             cursor: pointer;
-            margin-top: 10px;
+            margin: 8px;
+            font-size: 12px;
+            width: 100px;
         }
 
-        @media (max-width: 600px) {
-            .top-bar .title {
-                font-size: 14px;
-            }
+        .button:disabled {
+            background-color: #666;
+            cursor: not-allowed;
+        }
 
-            .diamond {
-                font-size: 20px;
-            }
+        .upgrade-button {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #444;
+            padding: 8px;
+            border-radius: 10px;
+            margin: 8px auto;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .upgrade-button p {
+            margin: 0;
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .bottom-nav button {
+            flex: 1;
+            background-color: #292929;
+            color: #007BFF;
+            border: none;
+            font-size: 14px;
+            padding: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
 
 <body>
 
+    <!-- Верхняя панель -->
     <div class="top-bar">
-        <div class="title">
-            <div class="avatar">
-                <img src="https://i.imgur.com/TGOk99x.png" alt="Beaver Avatar"
-                    style="width:100%; height:100%; border-radius:50%;">
-            </div>
-            Bober-Tap
-        </div>
-        <div class="right-icons">
-            <img src="https://i.imgur.com/SgGzlO1.png" alt="Diamond">
-            <img src="https://i.imgur.com/1HFxppQ.png" alt="Heart">
-        </div>
+        <div class="back-button" onclick="showSection('home')">Назад</div>
+        <div class="title">Bober-Tap</div>
     </div>
 
-    <div class="content">
-        <div class="diamond" id="diamondCount">0</div>
-
+    <!-- Главная страница -->
+    <div id="home" class="content active">
+        <div class="diamond-counter">
+            Ваши кристаллы: <span id="diamondCount">0</span>
+            <img src="https://i.imgur.com/SgGzlO1.png" alt="Кристалл">
+        </div>
         <div class="circle-character" id="boberCircle">
             <img src="https://i.imgur.com/vfMylNQ.png" alt="Bober">
         </div>
     </div>
 
-    <div class="bottom-nav">
-        <img src="https://img.icons8.com/fluency/48/000000/bitcoin.png" alt="Биржа" id="donateButton">
-        <img src="https://img.icons8.com/fluency/48/000000/gold-bars.png" alt="AirDrop" id="airDropButton">
-        <img src="https://img.icons8.com/fluency/48/000000/user-male.png" alt="Друзья" id="friendsButton">
-        <img src="https://img.icons8.com/fluency/48/000000/task.png" alt="Задания" id="tasksButton">
-        <img src="https://img.icons8.com/fluency/48/000000/star.png" alt="Рейтинг" id="showLeaderboard">
+    <!-- Прокачка -->
+    <div id="upgrade" class="content">
+        <h2>Прокачка</h2>
+        <div class="upgrade-button">
+            <p>Сила нажатия +50% (5 кристаллов)</p>
+            <button class="button" onclick="upgradeFeature(5, 'Сила нажатия увеличена на 50%!')">Улучшить</button>
+        </div>
+        <div class="upgrade-button">
+            <p>Авто-кликер (10 кристаллов)</p>
+            <button class="button" onclick="upgradeFeature(10, 'Авто-кликер активирован!')">Улучшить</button>
+        </div>
+        <div class="upgrade-button">
+            <p>Увеличение жизней +20% (8 кристаллов)</p>
+            <button class="button" onclick="upgradeFeature(8, 'Максимальные жизни увеличены на 20%!')">Улучшить</button>
+        </div>
+        <div class="upgrade-button">
+            <p>Увеличение атаки +30% (12 кристаллов)</p>
+            <button class="button" onclick="upgradeFeature(12, 'Атака увеличена на 30%!')">Улучшить</button>
+        </div>
     </div>
 
-    <div class="leaderboard" id="leaderboard">
-        <h3>Рейтинг</h3>
-        <ul id="leaderboardList">
-            <li>Игрок 1: 0</li>
-            <li>Игрок 2: 0</li>
-            <li>Игрок 3: 0</li>
-        </ul>
-        <button class="close-btn" id="closeLeaderboard">Закрыть</button>
+    <!-- Друзья -->
+    <div id="friends" class="content">
+        <h2>Пригласите друзей!</h2>
+        <button class="button">Пригласить друга (+0.1 кристалла)</button>
+        <button class="button">Пригласить друга с Telegram Premium (+0.3 кристалла)</button>
+        <div class="friends-list">
+            <h3>Список ваших друзей</h3>
+            <div>Друг 1</div>
+            <div>Друг 2</div>
+            <div>Друг 3</div>
+        </div>
+    </div>
+
+    <!-- Задания -->
+    <div id="tasks" class="content">
+        <h2>Задания</h2>
+        <div>Задание: Возвращение Bober Tap - 10 кристаллов</div>
+        <div>Задание: Легендарные крипто-твиты - 1 кристалл</div>
+        <div>Задание: Подписка на Instagram - 1 кристалл</div>
+    </div>
+
+    <!-- Нижняя навигация -->
+    <div class="bottom-nav">
+        <button onclick="showSection('home')">Главная</button>
+        <button onclick="showSection('upgrade')">Прокачка</button>
+        <button onclick="showSection('friends')">Друзья</button>
+        <button onclick="showSection('tasks')">Задания</button>
     </div>
 
     <script>
-        const diamondCountElement = document.getElementById('diamondCount');
-        const boberCircle = document.getElementById('boberCircle');
-        const leaderboardList = document.getElementById('leaderboardList');
-        const leaderboard = document.getElementById('leaderboard');
-        const showLeaderboardButton = document.getElementById('showLeaderboard');
-        const closeLeaderboardButton = document.getElementById('closeLeaderboard');
-        const airDropButton = document.getElementById('airDropButton');
-        const donateButton = document.getElementById('donateButton');
-        const friendsButton = document.getElementById('friendsButton');
-        const tasksButton = document.getElementById('tasksButton');
+        let diamondCount = 0;
 
-        let diamondCount = localStorage.getItem('diamondCount') ? parseInt(localStorage.getItem('diamondCount')) : 0;
-
-        let players = [
-            { name: 'Игрок 1', taps: localStorage.getItem('tapsPlayer1') ? parseInt(localStorage.getItem('tapsPlayer1')) : 0 },
-            { name: 'Игрок 2', taps: localStorage.getItem('tapsPlayer2') ? parseInt(localStorage.getItem('tapsPlayer2')) : 0 },
-            { name: 'Игрок 3', taps: localStorage.getItem('tapsPlayer3') ? parseInt(localStorage.getItem('tapsPlayer3')) : 0 },
-        ];
-
-        function updateCounter() {
-            diamondCountElement.textContent = diamondCount;
-            localStorage.setItem('diamondCount', diamondCount);
-            updateLeaderboard();
+        function showSection(sectionId) {
+            document.querySelectorAll('.content').forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
         }
 
-        function updateLeaderboard() {
-            players.sort((a, b) => b.taps - a.taps);
-            leaderboardList.innerHTML = '';
-            players.forEach(player => {
-                const li = document.createElement('li');
-                li.textContent = `${player.name}: ${player.taps}`;
-                leaderboardList.appendChild(li);
-            });
-
-            players.forEach((player, index) => {
-                localStorage.setItem(`tapsPlayer${index + 1}`, player.taps);
-            });
+        function updateDiamondDisplay() {
+            document.getElementById('diamondCount').textContent = diamondCount;
         }
 
-        updateCounter();
-
-        boberCircle.addEventListener('click', () => {
+        document.getElementById('boberCircle').addEventListener('click', () => {
             diamondCount++;
-            players[0].taps++;
-            updateCounter();
-
-            // Создаем монетку и добавляем её на экран
-            const coin = document.createElement('img');
-            coin.src = 'https://i.imgur.com/kMjVxqS.png';
-            coin.classList.add('coin');
-
-            // Генерируем случайную позицию
-            const randomX = Math.random() * (window.innerWidth - 40); // 40 - ширина монеты
-            const randomY = Math.random() * (window.innerHeight - 40); // 40 - высота монеты
-
-            coin.style.left = `${randomX}px`;
-            coin.style.top = `${randomY}px`;
-
-            document.body.appendChild(coin); // Добавляем монетку в body
-
-            setTimeout(() => {
-                coin.remove();
-            }, 1000); // Монетка исчезает через 1 секунду
+            updateDiamondDisplay();
         });
 
-        // Обработчики событий для кнопок
-        showLeaderboardButton.addEventListener('click', () => {
-            window.location.href = 'https://example.com/leaderboard'; // Замените на URL рейтинга
-        });
-
-        friendsButton.addEventListener('click', () => {
-            window.location.href = 'https://example.com/friends'; // Замените на URL друзей
-        });
-
-        tasksButton.addEventListener('click', () => {
-            window.location.href = 'https://example.com/tasks'; // Замените на URL заданий
-        });
-
-        donateButton.addEventListener('click', () => {
-            window.location.href = 'https://example.com/donate'; // Замените на URL доната
-        });
-
-        closeLeaderboardButton.addEventListener('click', () => {
-            leaderboard.style.display = 'none';
-        });
+        function upgradeFeature(cost, message) {
+            if (diamondCount >= cost) {
+                diamondCount -= cost;
+                alert(message);
+                updateDiamondDisplay();
+            } else {
+                alert('Недостаточно кристаллов!');
+            }
+        }
     </script>
 
 </body>
