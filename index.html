@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Bober-Tap</title>
     <style>
-        /* Основные стили для мобильного интерфейса */
         body, html {
             margin: 0;
             padding: 0;
@@ -16,30 +15,44 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            -webkit-user-select: none; /* Запрет выделения текста */
+            -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
             overflow: hidden;
+            font-size: 1.2em;
         }
 
         img {
-            -webkit-user-drag: none; /* Запрет на перетаскивание изображений */
+            -webkit-user-drag: none;
         }
 
         .top-bar, .bottom-nav {
             background-color: #292929;
-            padding: 10px;
+            padding: 15px;
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 14px;
+            font-size: 1em;
         }
 
         .top-bar .title {
-            font-size: 16px;
+            font-size: 1.1em;
             font-weight: bold;
+        }
+
+        .diamond-balance {
+            font-size: 1em;
+            color: #FFD700;
+            display: flex;
+            align-items: center;
+        }
+
+        .diamond-balance img {
+            width: 22px;
+            height: 22px;
+            margin-left: 8px;
         }
 
         .content {
@@ -53,23 +66,21 @@
             display: block;
         }
 
-        /* Стили кристалла */
         .diamond-counter {
-            font-size: 16px;
+            font-size: 1.2em;
             color: #FFD700;
-            margin-top: 15px;
+            margin-top: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .diamond-counter img {
-            width: 20px;
-            height: 20px;
-            margin-left: 5px;
+            width: 24px;
+            height: 24px;
+            margin-left: 8px;
         }
 
-        /* Круглый элемент с бобром */
         .circle-character {
             width: 100px;
             height: 100px;
@@ -80,6 +91,7 @@
             justify-content: center;
             align-items: center;
             cursor: pointer;
+            position: relative;
         }
 
         .circle-character img {
@@ -87,17 +99,16 @@
             height: 50px;
         }
 
-        /* Стили кнопок */
         .button {
             background-color: #007BFF;
             color: white;
             border: none;
-            padding: 8px 12px;
+            padding: 10px 15px;
             border-radius: 5px;
             cursor: pointer;
-            margin: 8px;
-            font-size: 12px;
-            width: 100px;
+            margin: 10px;
+            font-size: 1em;
+            width: 120px;
         }
 
         .button:disabled {
@@ -110,16 +121,16 @@
             justify-content: space-between;
             align-items: center;
             background-color: #444;
-            padding: 8px;
+            padding: 10px;
             border-radius: 10px;
-            margin: 8px auto;
-            width: 100%;
-            max-width: 300px;
+            margin: 10px auto;
+            width: 90%;
+            max-width: 320px;
         }
 
         .upgrade-button p {
             margin: 0;
-            font-size: 12px;
+            font-size: 1em;
             color: #ccc;
         }
 
@@ -128,22 +139,37 @@
             background-color: #292929;
             color: #007BFF;
             border: none;
-            font-size: 14px;
-            padding: 8px;
+            font-size: 1em;
+            padding: 10px;
             cursor: pointer;
+        }
+
+        .coin {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            animation: appear 0.5s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes appear {
+            0% { transform: scale(0) translate(0, 0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: scale(1) translate(0, -50px); opacity: 0; }
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Верхняя панель -->
     <div class="top-bar">
-        <div class="back-button" onclick="showSection('home')">Назад</div>
         <div class="title">Bober-Tap</div>
+        <div class="diamond-balance">
+            Баланс: <span id="diamondBalance">0</span>
+            <img src="https://i.imgur.com/SgGzlO1.png" alt="Кристалл">
+        </div>
     </div>
 
-    <!-- Главная страница -->
     <div id="home" class="content active">
         <div class="diamond-counter">
             Ваши кристаллы: <span id="diamondCount">0</span>
@@ -154,7 +180,6 @@
         </div>
     </div>
 
-    <!-- Прокачка -->
     <div id="upgrade" class="content">
         <h2>Прокачка</h2>
         <div class="upgrade-button">
@@ -165,17 +190,8 @@
             <p>Авто-кликер (10 кристаллов)</p>
             <button class="button" onclick="upgradeFeature(10, 'Авто-кликер активирован!')">Улучшить</button>
         </div>
-        <div class="upgrade-button">
-            <p>Увеличение жизней +20% (8 кристаллов)</p>
-            <button class="button" onclick="upgradeFeature(8, 'Максимальные жизни увеличены на 20%!')">Улучшить</button>
-        </div>
-        <div class="upgrade-button">
-            <p>Увеличение атаки +30% (12 кристаллов)</p>
-            <button class="button" onclick="upgradeFeature(12, 'Атака увеличена на 30%!')">Улучшить</button>
-        </div>
     </div>
 
-    <!-- Друзья -->
     <div id="friends" class="content">
         <h2>Пригласите друзей!</h2>
         <button class="button">Пригласить друга (+0.1 кристалла)</button>
@@ -188,15 +204,16 @@
         </div>
     </div>
 
-    <!-- Задания -->
     <div id="tasks" class="content">
         <h2>Задания</h2>
-        <div>Задание: Возвращение Bober Tap - 10 кристаллов</div>
-        <div>Задание: Легендарные крипто-твиты - 1 кристалл</div>
-        <div>Задание: Подписка на Instagram - 1 кристалл</div>
+        <div>Задание: Возвращение Bober Tap</div>
+        <button class="button" onclick="window.open('https://example.com/return')">Перейти</button>
+        <div>Задание: Легендарные крипто-твиты</div>
+        <button class="button" onclick="window.open('https://example.com/crypto-tweets')">Перейти</button>
+        <div>Задание: Подписка на Instagram</div>
+        <button class="button" onclick="window.open('https://instagram.com')">Перейти</button>
     </div>
 
-    <!-- Нижняя навигация -->
     <div class="bottom-nav">
         <button onclick="showSection('home')">Главная</button>
         <button onclick="showSection('upgrade')">Прокачка</button>
@@ -214,11 +231,26 @@
 
         function updateDiamondDisplay() {
             document.getElementById('diamondCount').textContent = diamondCount;
+            document.getElementById('diamondBalance').textContent = diamondCount;
         }
 
         document.getElementById('boberCircle').addEventListener('click', () => {
             diamondCount++;
             updateDiamondDisplay();
+
+            const coin = document.createElement('img');
+            coin.src = 'https://i.imgur.com/SgGzlO1.png';
+            coin.classList.add('coin');
+
+            const randomX = Math.random() * window.innerWidth * 0.8;
+            const randomY = Math.random() * window.innerHeight * 0.6;
+
+            coin.style.left = `${randomX}px`;
+            coin.style.top = `${randomY}px`;
+
+            document.getElementById('home').appendChild(coin);
+
+            setTimeout(() => coin.remove(), 500);
         });
 
         function upgradeFeature(cost, message) {
